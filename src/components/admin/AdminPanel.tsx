@@ -1,31 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Settings, 
-  Eye, 
-  EyeOff, 
-  Plus, 
-  Trash2, 
-  Edit3, 
-  Save, 
-  X, 
-  ChevronUp, 
-  ChevronDown,
-  Type,
-  Image as ImageIcon,
-  Palette,
-  Monitor,
-  Download,
-  Upload,
-  RotateCcw,
-  Database,
-  Sync,
-  LogOut,
-  User,
-  Clock,
-  AlertCircle,
-  CheckCircle,
-  XCircle
-} from 'lucide-react';
+import { Settings, Eye, EyeOff, Plus, Trash2, Edit3, Save, X, ChevronUp, ChevronDown, Type, Image as ImageIcon, Palette, Monitor, Download, Upload, RotateCcw, Database, FolderSync as Sync, LogOut, User, Clock, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
 import { ContentBlock, SiteContent, TextStyle } from '../../types/content';
 import { saveContent, loadContent } from '../../utils/contentStorage';
 import { logout, getAdminSession } from '../../utils/auth';
