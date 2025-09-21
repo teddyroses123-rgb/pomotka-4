@@ -255,3 +255,36 @@ export const loadFromDatabaseAndOverwrite = async (): Promise<SiteContent> => {
     return loadContentSync();
   }
 };
+
+// Функция для принудительного восстановления дефолтного контента
+export const forceRestoreDefaultContent = async (): Promise<SiteContent> => {
+  try {
+    console.log('🔄 Force restoring default content...');
+    
+    // Очищаем localStorage
+    localStorage.removeItem(STORAGE_KEY);
+    console.log('🗑️ localStorage cleared');
+    
+    // Берем дефолтный контент
+    const defaultFixedContent = fixBlockOrder(defaultContent);
+    
+    // Сохраняем в БД
+    const dbSaved = await saveContentToDatabase(defaultFixedContent);
+    if (dbSaved) {
+      console.log('✅ Default content saved to database');
+      // Создаем бекап в localStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultFixedContent));
+      console.log('💾 Default content saved to localStorage');
+    } else {
+      console.log('❌ Failed to save to database, but localStorage cleared');
+    }
+    
+    return defaultFixedContent;
+  } catch (error) {
+    console.error('❌ Error in force restore:', error);
+    // В любом случае возвращаем дефолтный контент
+    const defaultFixedContent = fixBlockOrder(defaultContent);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultFixedContent));
+    return defaultFixedContent;
+  }
+};
