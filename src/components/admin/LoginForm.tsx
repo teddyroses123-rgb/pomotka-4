@@ -56,7 +56,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8 w-full max-w-md mx-4">
+      <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8 w-full max-w-md mx-4 relative">
         {onClose && (
           <button
             onClick={onClose}
