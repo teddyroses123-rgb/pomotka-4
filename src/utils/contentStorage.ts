@@ -99,18 +99,6 @@ export const loadContent = async (): Promise<SiteContent> => {
   } catch (error) {
     console.error('❌ КРИТИЧЕСКАЯ ОШИБКА загрузки из БД:', error);
     
-    // ТОЛЬКО В КРИТИЧЕСКОМ СЛУЧАЕ используем бекап из localStorage
-    try {
-      const backupContent = localStorage.getItem(STORAGE_KEY);
-      if (backupContent) {
-        console.log('🆘 ИСПОЛЬЗУЕМ БЕКАП ИЗ localStorage (критический режим)');
-        const content = JSON.parse(backupContent);
-        return fixBlockOrder(content);
-      }
-    } catch (backupError) {
-      console.error('❌ Ошибка загрузки бекапа:', backupError);
-    }
-    
     // Последний резерв - дефолтный контент
     console.log('🆘 ПОСЛЕДНИЙ РЕЗЕРВ: дефолтный контент');
     const defaultFixedContent = fixBlockOrder(defaultContent);
@@ -174,17 +162,6 @@ const fixBlockOrder = (content: SiteContent): SiteContent => {
 };
 
 export const loadContentSync = (): SiteContent => {
-  try {
-    // Синхронная загрузка только из бекапа localStorage (для экстренных случаев)
-    const backupContent = localStorage.getItem(STORAGE_KEY);
-    if (backupContent) {
-      console.log('💾 Загружен бекап из localStorage (синхронно)');
-      const content = JSON.parse(backupContent);
-      return fixBlockOrder(content);
-    }
-  } catch (error) {
-    console.error('❌ Error loading backup sync:', error);
-  }
   console.log('📦 Using default content (sync fallback)');
   return fixBlockOrder(defaultContent);
 };
@@ -248,11 +225,11 @@ export const loadFromDatabaseAndOverwrite = async (): Promise<SiteContent> => {
       return fixedContent;
     } else {
       console.log('⚠️ No content in database, keeping current localStorage');
-      return loadContentSync();
+      return fixBlockOrder(defaultContent);
     }
   } catch (error) {
     console.error('❌ Error loading from database:', error);
-    return loadContentSync();
+    return fixBlockOrder(defaultContent);
   }
 };
 
