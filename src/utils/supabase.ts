@@ -14,20 +14,26 @@ export const saveContentToDatabase = async (content: SiteContent): Promise<boole
   try {
     console.log('🔄 ПОПЫТКА СОХРАНЕНИЯ В БД...');
     
-    const { data, error } = await supabase
-      .from('site_content')
-      .upsert({
-        id: 'main',
+    const response = await fetch(`${supabaseUrl}/functions/v1/save-content`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${supabaseAnonKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         content: content,
-        updated_at: new Date().toISOString()
-      });
+        adminSecret: 'admin123' // Default admin secret
+      })
+    });
 
-    if (error) {
-      console.error('❌ ОШИБКА СОХРАНЕНИЯ В БД:', error);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ ОШИБКА СОХРАНЕНИЯ В БД:', errorText);
       return false;
     }
 
-    console.log('✅ КОНТЕНТ УСПЕШНО СОХРАНЕН В БАЗУ ДАННЫХ!', data);
+    const result = await response.json();
+    console.log('✅ КОНТЕНТ УСПЕШНО СОХРАНЕН В БАЗУ ДАННЫХ!', result);
     return true;
   } catch (error) {
     console.error('❌ КРИТИЧЕСКАЯ ОШИБКА СОХРАНЕНИЯ В БД:', error);
