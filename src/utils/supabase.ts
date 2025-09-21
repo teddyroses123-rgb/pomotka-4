@@ -22,7 +22,7 @@ export const saveContentToDatabase = async (content: SiteContent): Promise<boole
       },
       body: JSON.stringify({
         content: content,
-        adminSecret: 'podmotka1122_admin_secret' // Default admin secret
+        adminSecret: 'admin123' // Default admin secret
       })
     });
 
