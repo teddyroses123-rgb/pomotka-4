@@ -121,7 +121,7 @@ const fixBlockOrder = (content: SiteContent): SiteContent => {
 };
 
 export const loadContentSync = (): SiteContent => {
-  throw new Error('Синхронная загрузка не поддерживается - используйте loadContent()');
+  return defaultContent;
 };
 
 export const resetContent = (): SiteContent => {
