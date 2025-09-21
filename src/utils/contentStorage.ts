@@ -130,9 +130,9 @@ export const loadContent = async (): Promise<SiteContent> => {
 // Функция для исправления порядка блоков
 const fixBlockOrder = (content: SiteContent): SiteContent => {
   console.log('🔧 Fixing block order');
-  console.log('Current blocks:', (content.blocks || []).map(b => ({ id: b.id, title: b.title, order: b.order, type: b.type })));
+  console.log('Current blocks:', (content?.blocks || []).map(b => ({ id: b.id, title: b.title, order: b.order, type: b.type })));
   
-  const reorderedBlocks = (content.blocks || []).map(block => {
+  const reorderedBlocks = (content?.blocks || []).map(block => {
     // Системные блоки с фиксированным порядком
     if (block.id === 'hero') return { ...block, order: 1 };
     if (block.id === 'features') return { ...block, order: 2 };
@@ -149,7 +149,7 @@ const fixBlockOrder = (content: SiteContent): SiteContent => {
     
     // Пользовательские блоки - между OPS (6) и видео (50)
     if (block.type === 'custom') {
-      const customBlocks = (content.blocks || []).filter(b => b.type === 'custom');
+      const customBlocks = (content?.blocks || []).filter(b => b.type === 'custom');
       const customIndex = customBlocks.findIndex(b => b.id === block.id);
       const newOrder = 7 + customIndex;
       console.log(`📦 Custom block "${block.title}" (${block.id}): ${block.order} -> ${newOrder}`);
@@ -168,8 +168,8 @@ const fixBlockOrder = (content: SiteContent): SiteContent => {
   
   return {
     ...content,
-    blocks: content.blocks || [],
-    blocks: reorderedBlocks
+    blocks: reorderedBlocks,
+    navigation: content?.navigation || defaultContent.navigation
   };
 };
 
